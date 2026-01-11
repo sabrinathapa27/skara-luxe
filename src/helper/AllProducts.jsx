@@ -9,7 +9,7 @@ export const allProducts = [
     reviewCount: 124,
     isNew: true,
     category: "Silk",
-    image: "/trending/banarasi.png",
+    image: "/products/banarasi.png",
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ export const allProducts = [
     reviewCount: 89,
     isNew: false,
     category: "Cotton",
-    image: "/trending/cotton.png",
+    image: "/products/cotton.png",
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ export const allProducts = [
     reviewCount: 156,
     isNew: true,
     category: "Silk",
-    image: "/trending/kanjivaram.png",
+    image: "/products/kanjivaram.png",
   },
   {
     id: 4,
@@ -46,7 +46,7 @@ export const allProducts = [
     reviewCount: 67,
     isNew: false,
     category: "Cotton",
-    image: "/trending/bandhani.png",
+    image: "/products/bandhani.png",
   },
   {
     id: 5,
@@ -58,7 +58,7 @@ export const allProducts = [
     reviewCount: 92,
     isNew: true,
     category: "Organza",
-    image: "/trending/organza.png",
+    image: "/products/organza.png",
   },
   {
     id: 6,
@@ -70,7 +70,7 @@ export const allProducts = [
     reviewCount: 78,
     isNew: false,
     category: "Silk",
-    image: "/trending/tussar.png",
+    image: "/products/tussar.png",
   },
   {
     id: 7,
@@ -82,7 +82,7 @@ export const allProducts = [
     reviewCount: 103,
     isNew: true,
     category: "Net",
-    image: "/trending/net.png",
+    image: "/products/net.png",
   },
   {
     id: 8,
@@ -95,7 +95,7 @@ export const allProducts = [
     reviewCount: 142,
     isNew: true,
     category: "Georgette",
-    image: "/trending/georgette.png",
+    image: "/products/georgette.png",
   },
   {
     id: 9,
@@ -107,7 +107,7 @@ export const allProducts = [
     reviewCount: 87,
     isNew: false,
     category: "Silk",
-    image: "/trending/patola.png",
+    image: "/products/patola.png",
   },
   {
     id: 10,
@@ -120,7 +120,7 @@ export const allProducts = [
     reviewCount: 65,
     isNew: true,
     category: "Linen",
-    image: "/trending/linen.png",
+    image: "/products/linen.png",
   },
   {
     id: 11,
@@ -133,7 +133,7 @@ export const allProducts = [
     reviewCount: 118,
     isNew: false,
     category: "Jamawar",
-    image: "/trending/jamawar.png",
+    image: "/products/jamawar.png",
   },
   {
     id: 12,
@@ -146,7 +146,7 @@ export const allProducts = [
     reviewCount: 91,
     isNew: true,
     category: "Chiffon",
-    image: "/trending/chiffon.png",
+    image: "/products/chiffon.png",
   },
   {
     id: 13,
@@ -158,7 +158,7 @@ export const allProducts = [
     reviewCount: 134,
     isNew: false,
     category: "Silk",
-    image: "/trending/paithani.png",
+    image: "/products/paithani.png",
   },
   {
     id: 14,
@@ -170,7 +170,7 @@ export const allProducts = [
     reviewCount: 77,
     isNew: true,
     category: "Crepe",
-    image: "/trending/crepe.png",
+    image: "/products/crepe.png",
   },
   {
     id: 15,
@@ -182,7 +182,7 @@ export const allProducts = [
     reviewCount: 156,
     isNew: false,
     category: "Silk",
-    image: "/trending/mysore.png",
+    image: "/products/mysore.png",
   },
   {
     id: 16,
@@ -194,7 +194,7 @@ export const allProducts = [
     reviewCount: 103,
     isNew: true,
     category: "Velvet",
-    image: "/trending/velvet.png",
+    image: "/products/velvet.png",
   },
   {
     id: 17,
@@ -206,7 +206,7 @@ export const allProducts = [
     reviewCount: 89,
     isNew: false,
     category: "Silk",
-    image: "/trending/bhagalpuri.png",
+    image: "/products/bhagalpuri.png",
   },
   {
     id: 18,
@@ -219,7 +219,7 @@ export const allProducts = [
     reviewCount: 73,
     isNew: false,
     category: "Ikat",
-    image: "/trending/pochampally.png",
+    image: "/products/pochampally.png",
   },
   {
     id: 19,
@@ -232,7 +232,7 @@ export const allProducts = [
     reviewCount: 98,
     isNew: true,
     category: "Handpainted",
-    image: "/trending/kalamkari.png",
+    image: "/products/kalamkari.png",
   },
   {
     id: 20,
@@ -245,6 +245,6 @@ export const allProducts = [
     reviewCount: 112,
     isNew: false,
     category: "Silk",
-    image: "/trending/baluchari.png",
+    image: "/products/baluchari.png",
   },
 ];

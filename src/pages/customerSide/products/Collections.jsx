@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { allProducts } from "../../../helper/AllProducts";
+import CustomImagePreview from "../../../components/custom/CustomImagePreview";
 
 const Collections = () => {
   const theme = useTheme();
@@ -28,22 +29,22 @@ const Collections = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(allProducts);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  // Get unique categories
   const categories = [
     "all",
     ...new Set(allProducts.map((product) => product.category)),
   ];
 
-  // Filter products when category or search changes
   useEffect(() => {
     let filtered = allProducts;
 
-    // Apply category filter
     if (selectedCategory !== "all") {
       filtered = filtered.filter(
         (product) => product.category === selectedCategory
@@ -79,6 +80,18 @@ const Collections = () => {
   const handleShowAllProducts = () => {
     setSelectedCategory("all");
     setSearchQuery("");
+  };
+
+  const handleImageClick = (imageUrl, productName) => {
+    setPreviewImage(imageUrl);
+    setPreviewTitle(productName);
+    setPreviewOpen(true);
+  };
+
+  const handlePreviewClose = () => {
+    setPreviewOpen(false);
+    setPreviewImage("");
+    setPreviewTitle("");
   };
 
   const formatCurrency = (amount) => {
@@ -258,7 +271,12 @@ const Collections = () => {
                         width: "100%",
                         pt: "100%",
                         overflow: "hidden",
+                        cursor: "pointer",
+                        "&:hover img": {
+                          transform: "scale(1.05)",
+                        },
                       }}
+                      onClick={() => handleImageClick(product.image, product.name)}
                     >
                       <CardMedia
                         component="img"
@@ -271,6 +289,7 @@ const Collections = () => {
                           width: "100%",
                           height: "100%",
                           objectFit: "cover",
+                          transition: "transform 0.3s ease",
                         }}
                       />
                       {product.isNew && (
@@ -422,6 +441,14 @@ const Collections = () => {
             </Box>
           </>
         )}
+
+        {/* Image Preview Dialog */}
+        <CustomImagePreview
+          open={previewOpen}
+          imageUrl={previewImage}
+          title={previewTitle}
+          onClose={handlePreviewClose}
+        />
       </Container>
     </Box>
   );

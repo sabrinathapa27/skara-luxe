@@ -1,26 +1,30 @@
 import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
   Box,
   Container,
   Grid,
   Typography,
   Link,
-  TextField,
-  Button,
   Stack,
   Divider,
   useTheme,
 } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import PinterestIcon from "@mui/icons-material/Pinterest";
 import { WhatsApp } from "@mui/icons-material";
 
 const Footer = () => {
   const theme = useTheme();
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
+
+  const footerLinks = [
+    { label: "Contact Us", path: "/" },
+    { label: "Shipping Info", path: "/shipping-info" },
+    { label: "Returns", path: "/return-policy " },
+    { label: "FAQ", path: "/faqs" },
+  ];
 
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
@@ -36,7 +40,7 @@ const Footer = () => {
         <Box sx={{ py: 6 }}>
           <Grid container spacing={4}>
             {/* About Section */}
-            <Grid size={{xs:12, md:3}}>
+            <Grid size={{ xs: 12, md: 3 }}>
               <Typography
                 variant="h6"
                 sx={{ color: theme.palette.primary.main, marginBottom: 2 }}
@@ -56,7 +60,7 @@ const Footer = () => {
             </Grid>
 
             {/* Quick Links */}
-            <Grid size={{xs:12, md:3}}>
+            <Grid size={{ xs: 12, md: 3 }}>
               <Typography
                 variant="h6"
                 sx={{ color: theme.palette.primary.main, marginBottom: 2 }}
@@ -85,7 +89,7 @@ const Footer = () => {
             </Grid>
 
             {/* Customer Service */}
-            <Grid size={{xs:12, md:3}}>
+            <Grid size={{ xs: 12, md: 3 }}>
               <Typography
                 variant="h6"
                 sx={{ color: theme.palette.primary.main, marginBottom: 2 }}
@@ -93,28 +97,30 @@ const Footer = () => {
                 Customer Service
               </Typography>
               <Stack spacing={1}>
-                {["Contact Us", "Shipping Info", "Returns", "FAQ"].map(
-                  (link) => (
-                    <Link
-                      key={link}
-                      href="/"
-                      sx={{
-                        color: theme.palette.primary.contrastText,
-                        textDecoration: "none",
-                        fontSize: "0.875rem",
-                        transition: "color 250ms ease-in-out",
-                        "&:hover": { color: theme.palette.primary.main },
-                      }}
-                    >
-                      {link}
-                    </Link>
-                  )
-                )}
+                {footerLinks.map((item) => (
+                  <Link
+                    key={item.label}
+                    component={RouterLink}
+                    to={item.path}
+                    sx={{
+                      color: theme.palette.primary.contrastText,
+                      textDecoration: "none",
+                      fontSize: "0.875rem",
+                      transition: "color 250ms ease-in-out",
+                      "&:hover": {
+                        color: theme.palette.primary.main,
+                        cursor: "pointer",
+                      },
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </Stack>
             </Grid>
 
             {/* Social Links */}
-            <Grid size={{xs:12, md: 3}}>
+            <Grid size={{ xs: 12, md: 3 }}>
               <Typography
                 variant="h6"
                 sx={{ color: theme.palette.primary.main, marginBottom: 2 }}
@@ -124,19 +130,28 @@ const Footer = () => {
               <Stack direction="row" spacing={2}>
                 <Link
                   href="/"
-                  sx={{ color: theme.palette.primary.contrastText, "&:hover": { color: theme.palette.primary.main } }}
+                  sx={{
+                    color: theme.palette.primary.contrastText,
+                    "&:hover": { color: theme.palette.primary.main },
+                  }}
                 >
                   <FacebookIcon />
                 </Link>
                 <Link
                   href="/"
-                  sx={{ color: theme.palette.primary.contrastText, "&:hover": { color: theme.palette.primary.main } }}
+                  sx={{
+                    color: theme.palette.primary.contrastText,
+                    "&:hover": { color: theme.palette.primary.main },
+                  }}
                 >
                   <InstagramIcon />
                 </Link>
                 <Link
                   href="/"
-                  sx={{ color: theme.palette.primary.contrastText, "&:hover": { color: theme.palette.primary.main } }}
+                  sx={{
+                    color: theme.palette.primary.contrastText,
+                    "&:hover": { color: theme.palette.primary.main },
+                  }}
                 >
                   <WhatsApp />
                 </Link>
@@ -174,14 +189,14 @@ const Footer = () => {
             </Link>
             <Typography sx={{ color: "#4B5563" }}>|</Typography>
             <Link
-              href="/"
+              href="/return-policy"
               sx={{
                 color: "#9CA3AF",
                 textDecoration: "none",
                 "&:hover": { color: "#F06292" },
               }}
             >
-              Terms of Service
+              Return Policy
             </Link>
             <Typography sx={{ color: "#4B5563" }}>|</Typography>
             <Link

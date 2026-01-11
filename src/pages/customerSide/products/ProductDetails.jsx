@@ -32,11 +32,16 @@ import {
 } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import { allProducts } from "../../../helper/AllProducts";
+import { useCart } from "../../../context/CartContext";
+import { toast } from "react-toastify";
+import { useNotification } from "../../../context/NotificationContext";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const { addToCart, getCartItemCount } = useCart();
   const navigate = useNavigate();
   const theme = useTheme();
+  const { showNotification } = useNotification();
 
   const [product, setProduct] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -66,15 +71,14 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
-    const cartItem = {
-      ...product,
-      quantity,
-      selectedSize,
-      selectedColor,
-    };
-    console.log("Added to cart:", cartItem);
-    // Here you would typically dispatch to Redux or context
-    alert(`Added ${quantity} ${product.name} to cart!`);
+    if (!product) return;
+
+    addToCart(product, quantity, selectedSize, selectedColor);
+
+    showNotification(
+      `${quantity} × ${product.name} added to cart`,
+      "success"
+    );
   };
 
   const handleBuyNow = () => {
@@ -105,7 +109,12 @@ const ProductDetails = () => {
     );
   }
 
-  // Mock data for sizes and colors (you can add these to your product data)
+  const alreadyInCart = getCartItemCount(
+    product.id,
+    selectedSize,
+    selectedColor
+  );
+
   const sizes = ["Standard", "Small", "Medium", "Large"];
   const colors = [
     { name: "Red", hex: "#ff0000" },
@@ -115,7 +124,6 @@ const ProductDetails = () => {
     { name: "Purple", hex: "#800080" },
   ];
 
-  // Mock related products (filter by same category)
   const relatedProducts = allProducts
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
@@ -302,6 +310,7 @@ const ProductDetails = () => {
                 <Typography variant="h6" sx={{ mb: 2 }}>
                   Select Size
                 </Typography>
+                <Grid size={{xs:6, md:4}}>
                 <Stack direction="row" spacing={2}>
                   {sizes.map((size) => (
                     <Button
@@ -320,6 +329,7 @@ const ProductDetails = () => {
                     </Button>
                   ))}
                 </Stack>
+                </Grid>
               </Box>
 
               {/* Color Selection */}
@@ -400,6 +410,17 @@ const ProductDetails = () => {
                     <Add />
                   </IconButton>
                 </Stack>
+
+                {/* Show how many are already in cart */}
+                {alreadyInCart > 0 && (
+                  <Typography
+                    variant="body2"
+                    color="primary"
+                    sx={{ mt: 1, fontStyle: "italic" }}
+                  >
+                    {alreadyInCart} already in cart
+                  </Typography>
+                )}
               </Box>
 
               {/* Action Buttons */}
@@ -418,7 +439,7 @@ const ProductDetails = () => {
                     },
                   }}
                 >
-                  Add to Cart
+                  {alreadyInCart > 0 ? "Add More" : "Add to Cart"}
                 </Button>
                 <Button
                   variant="outlined"

@@ -139,19 +139,44 @@ const Cart = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          px: 2, 
         }}
       >
-        <Box sx={{ textAlign: "center", py: 8, width: "100%", maxWidth: 500 }}>
+        <Box
+          sx={{
+            textAlign: "center",
+            py: { xs: 4, md: 8 },
+            width: "100%",
+            maxWidth: 500,
+            px: { xs: 2, md:3 },
+          }}
+        >
           <ShoppingBag
-            sx={{ fontSize: 80, color: theme.palette.grey[400], mb: 3 }}
+            sx={{
+              fontSize: { xs: 60, md: 80 },
+              color: theme.palette.grey[400],
+              mb: { xs: 2, md:3},
+            }}
           />
           <Typography
             variant="h4"
-            sx={{ mb: 2, color: theme.palette.primary.dark }}
+            sx={{
+              mb: { xs: 1.5, sm: 2 },
+              color: theme.palette.primary.dark,
+              fontSize: { xs: "1.75rem", sm: "2.125rem" },
+            }}
           >
             Your Cart is Empty
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{
+              mb: { xs: 3, sm: 4 },
+              fontSize: { xs: "0.9rem", sm: "1rem" },
+              lineHeight: 1.5,
+            }}
+          >
             Looks like you haven't added any products to your cart yet.
           </Typography>
           <Button
@@ -160,8 +185,11 @@ const Cart = () => {
             onClick={handleContinueShopping}
             sx={{
               backgroundColor: theme.palette.primary.main,
-              px: 4,
+              px: { xs: 3, sm: 4 }, // Equal padding on both sides
               py: 1.5,
+              width: { xs: "100%", sm: "auto" },
+              maxWidth: { xs: "100%", sm: "none" },
+              fontSize: { xs: "0.9rem", sm: "1rem" },
             }}
           >
             Continue Shopping
@@ -170,7 +198,6 @@ const Cart = () => {
       </Box>
     );
   }
-
   return (
     <>
       <Box sx={{ width: "100vw", minHeight: "100vh" }}>

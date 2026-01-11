@@ -16,6 +16,7 @@ import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { allProducts } from "../../../helper/AllProducts";
+import CustomImagePreview from "../../../components/custom/CustomImagePreview";
 
 const trendingProducts = allProducts.filter(
   (product) => product.id >= 1 && product.id <= 7
@@ -29,6 +30,9 @@ const Trending = () => {
   const scrollContainerRef = useRef(null);
   const autoScrollIntervalRef = useRef(null);
   const cardRefs = useRef([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
 
   const performScroll = (index) => {
     if (scrollContainerRef.current && cardRefs.current[index]) {
@@ -79,6 +83,18 @@ const Trending = () => {
       currency: "NPR",
       maximumFractionDigits: 0,
     }).format(amount);
+  };
+
+  const handleImageClick = (image, name) => {
+    setPreviewImage(image);
+    setPreviewTitle(name);
+    setPreviewOpen(true);
+  };
+
+  const handlePreviewClose = () => {
+    setPreviewOpen(false);
+    setPreviewImage("");
+    setPreviewTitle("");
   };
 
   return (
@@ -165,7 +181,9 @@ const Trending = () => {
                   width: "100%",
                   pt: "100%",
                   overflow: "hidden",
+                  cursor: "pointer",
                 }}
+                onClick={() => handleImageClick(product.image, product.name)}
               >
                 <CardMedia
                   component="img"
@@ -315,6 +333,13 @@ const Trending = () => {
           Explore More Products
         </Button>
       </Container>
+
+      <CustomImagePreview
+        open={previewOpen}
+        imageUrl={previewImage}
+        onClose={handlePreviewClose}
+        title={previewTitle}
+      />
     </Box>
   );
 };

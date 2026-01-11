@@ -103,7 +103,7 @@ const Collections = () => {
   };
 
   return (
-    <Box sx={{ py: { xs: 4, md: 6 }, backgroundColor: theme.palette.grey[50] }}>
+    <Box sx={{ py:2, backgroundColor: theme.palette.grey[50] }}>
       <Container maxWidth="xl">
         {/* Header */}
         <Box sx={{ mb: 4, textAlign: "center" }}>

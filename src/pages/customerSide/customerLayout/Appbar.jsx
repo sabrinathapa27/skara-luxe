@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { useEffect } from "react";
 import {
   AppBar as MuiAppBar,
   Toolbar,
@@ -15,60 +15,101 @@ import {
   Search as SearchIcon,
   ShoppingBagOutlined as ShoppingBagIcon,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
-const NAV_LINKS = ["Home", "Collections", "About", "Contact"];
+const NAV_LINKS = ["Home", "Collections", "Contact"];
 const ACTIONS = [
   { icon: SearchIcon, label: "Search" },
   { icon: FavoriteIcon, label: "Favorites" },
   { icon: ShoppingBagIcon, label: "Cart" },
 ];
-const NavButton = memo(({ link }) => {
-  const theme = useTheme();
-
-  return (
-    <Button
-      sx={{
-        color: "#1F2937",
-        fontSize: "1rem",
-        fontWeight: 500,
-        textTransform: "capitalize",
-        position: "relative",
-        minWidth: "auto",
-        px: 1,
-        "&::after": {
-          content: '""',
-          position: "absolute",
-          bottom: "-4px",
-          left: 0,
-          width: 0,
-          height: "2px",
-          backgroundColor: theme.palette.primary.main,
-          transition: "width 250ms ease-in-out",
-        },
-        "&:hover::after": {
-          width: "100%",
-        },
-        "&:hover": {
-          backgroundColor: "transparent",
-        },
-      }}
-    >
-      {link}
-    </Button>
-  );
-});
-
-NavButton.displayName = "NavButton";
-const ActionIcon = memo(({ Icon, label }) => (
-  <IconButton sx={{ color: "#1F2937" }} size="medium" aria-label={label}>
-    <Icon />
-  </IconButton>
-));
-
-ActionIcon.displayName = "ActionIcon";
 
 const Appbar = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const NavButton = ({ link }) => {
+    const handleClick = () => {
+      switch (link.toLowerCase()) {
+        case "home":
+          navigate("/");
+          break;
+        case "collections":
+          navigate("/collections");
+          break;
+        case "contact":
+          navigate("/contact");
+          break;
+        default:
+          navigate("/");
+      }
+    };
+
+    return (
+      <Button
+        onClick={handleClick}
+        sx={{
+          color: "#1F2937",
+          fontSize: "1rem",
+          fontWeight: 500,
+          textTransform: "capitalize",
+          position: "relative",
+          minWidth: "auto",
+          px: 1,
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            bottom: "-4px",
+            left: 0,
+            width: 0,
+            height: "2px",
+            backgroundColor: theme.palette.primary.main,
+            transition: "width 250ms ease-in-out",
+          },
+          "&:hover::after": {
+            width: "100%",
+          },
+          "&:hover": {
+            backgroundColor: "transparent",
+          },
+        }}
+      >
+        {link}
+      </Button>
+    );
+  };
+
+  const ActionIcon = ({ Icon, label }) => {
+    const handleActionClick = () => {
+      switch (label.toLowerCase()) {
+        case "search":
+          console.log("Search clicked");
+          break;
+        case "favorites":
+          navigate("/wishlist");
+          break;
+        case "cart":
+          navigate("/cart");
+          break;
+        default:
+          console.log(`${label} clicked`);
+      }
+    };
+
+    return (
+      <IconButton
+        onClick={handleActionClick}
+        sx={{ color: "#1F2937" }}
+        size="medium"
+        aria-label={label}
+      >
+        <Icon />
+      </IconButton>
+    );
+  };
+  const handleLogoClick = () => {
+    navigate("/");
+  };
 
   return (
     <MuiAppBar
@@ -91,7 +132,13 @@ const Appbar = () => {
           }}
         >
           {/* Logo Section */}
-          <Stack direction="row" alignItems="center" spacing={2}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={2}
+            sx={{ cursor: "pointer" }}
+            onClick={handleLogoClick}
+          >
             <Box
               component="img"
               src="/logo.png"
@@ -108,7 +155,6 @@ const Appbar = () => {
                 fontFamily: "'Playfair Display', serif",
                 color: theme.palette.primary?.dark || "#EC407A",
                 fontWeight: 700,
-                cursor: "pointer",
                 display: { xs: "none", sm: "block" },
                 fontSize: { sm: "1.75rem", md: "2rem" },
               }}
@@ -138,6 +184,7 @@ const Appbar = () => {
             <Button
               variant="contained"
               disableElevation
+              onClick={() => navigate("/register")}
               sx={{
                 backgroundColor: theme.palette.primary.main,
                 color: "#FFFFFF",
@@ -157,7 +204,28 @@ const Appbar = () => {
                 },
               }}
             >
-              Order Now
+              Login
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => navigate("/register")}
+              size="small"
+              sx={{
+                borderColor: theme.palette.primary.main,
+                color: theme.palette.primary.main,
+                px: { xs: 1.5, md: 2 },
+                py: 1,
+                ml: { xs: 0.5, md: 1 },
+                fontSize: "1rem",
+                fontWeight: 600,
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.light,
+                  color: "#2C1B47",
+                  transform: "translateY(-2px)",
+                },
+              }}
+            >
+              SignUp
             </Button>
           </Stack>
         </Toolbar>
@@ -166,4 +234,4 @@ const Appbar = () => {
   );
 };
 
-export default memo(Appbar);
+export default Appbar;

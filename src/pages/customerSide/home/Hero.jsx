@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Container,
@@ -13,9 +13,15 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import PaletteIcon from "@mui/icons-material/Palette";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const features = [
     {
@@ -53,6 +59,10 @@ const Hero = () => {
       description: "Dedicated support for your needs",
     },
   ];
+
+  const handleShopNow = () => {
+    navigate("/collections");
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -125,10 +135,11 @@ const Hero = () => {
                       boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
                     },
                   }}
+                  onClick={handleShopNow}
                 >
                   Shop Now
                 </Button>
-                <Button
+                {/* <Button
                   variant="outlined"
                   sx={{
                     borderColor: theme.palette.primary.main,
@@ -142,9 +153,10 @@ const Hero = () => {
                       transform: "translateY(-2px)",
                     },
                   }}
+                  onClick ={handleViewCollections}
                 >
                   View Collections
-                </Button>
+                </Button> */}
               </Stack>
             </Grid>
 
@@ -175,10 +187,10 @@ const Hero = () => {
         maxWidth={false}
         sx={{
           px: {
-            xs: 2, 
-            sm: 3, 
-            md: 6, 
-            lg: 12, 
+            xs: 2,
+            sm: 3,
+            md: 6,
+            lg: 12,
           },
           py: { xs: 4, md: 6 },
         }}
@@ -192,9 +204,9 @@ const Hero = () => {
               width: "100%",
               marginBottom: { xs: 3, md: 4 },
               fontSize: {
-                xs: "1.5rem", 
-                sm: "1.75rem", 
-                md: "2rem", 
+                xs: "1.5rem",
+                sm: "1.75rem",
+                md: "2rem",
               },
               px: { xs: 1, sm: 0 },
             }}
@@ -203,14 +215,13 @@ const Hero = () => {
           </Typography>
 
           {features.map((feature, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}
-            >
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
               <Paper
                 sx={{
                   padding: {
-                    xs: 2, 
+                    xs: 2,
                     sm: 2.5,
-                    md: 3, 
+                    md: 3,
                   },
                   height: "100%",
                   textAlign: "center",
@@ -218,9 +229,9 @@ const Hero = () => {
                   backgroundColor: "background.paper",
                   cursor: "pointer",
                   "&:hover": {
-                    transform: { xs: "none", sm: "translateY(-4px)" }, 
+                    transform: { xs: "none", sm: "translateY(-4px)" },
                     boxShadow: {
-                      xs: "0 2px 4px rgba(0, 0, 0, 0.1)", 
+                      xs: "0 2px 4px rgba(0, 0, 0, 0.1)",
                       sm: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
                     },
                     backgroundColor: theme.palette.primary.light,
@@ -249,7 +260,7 @@ const Hero = () => {
                     sx: {
                       fontSize: {
                         xs: 32,
-                        sm: 36, 
+                        sm: 36,
                         md: 40,
                       },
                     },
@@ -264,9 +275,9 @@ const Hero = () => {
                     fontFamily: "'Playfair Display', serif",
                     transition: "color 250ms ease-in-out",
                     fontSize: {
-                      xs: "1rem", 
-                      sm: "1.125rem", 
-                      md: "1.25rem", 
+                      xs: "1rem",
+                      sm: "1.125rem",
+                      md: "1.25rem",
                     },
                   }}
                 >
@@ -280,7 +291,7 @@ const Hero = () => {
                     transition: "color 250ms ease-in-out",
                     fontSize: {
                       xs: "0.8125rem",
-                      sm: "0.875rem", 
+                      sm: "0.875rem",
                       md: "0.9375rem",
                     },
                     lineHeight: 1.6,

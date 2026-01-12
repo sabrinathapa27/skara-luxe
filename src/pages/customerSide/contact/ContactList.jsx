@@ -19,14 +19,9 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import BusinessIcon from "@mui/icons-material/Business";
-import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import WorkIcon from "@mui/icons-material/Work";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import TwitterIcon from "@mui/icons-material/Twitter";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import StoreIcon from "@mui/icons-material/Store";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 
 const ContactList = () => {
   const theme = useTheme();

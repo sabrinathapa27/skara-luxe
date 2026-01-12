@@ -15,10 +15,6 @@ import {
   Card,
   CardMedia,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   CardContent,
 } from "@mui/material";
 import {
@@ -33,12 +29,18 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { allProducts } from "../../../helper/AllProducts";
 import { useCart } from "../../../context/CartContext";
-import { toast } from "react-toastify";
 import { useNotification } from "../../../context/NotificationContext";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const { addToCart, getCartItemCount } = useCart();
+  const {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    getCartTotal,
+    getCartCount,
+  } = useCart();
   const navigate = useNavigate();
   const theme = useTheme();
   const { showNotification } = useNotification();
@@ -62,6 +64,22 @@ const ProductDetails = () => {
     }
   }, [id]);
 
+  // Get how many of this specific product variant are already in cart
+  const getItemInCartCount = () => {
+    if (!product) return 0;
+
+    const existingItem = cartItems.find(
+      (item) =>
+        item.id === product.id &&
+        item.selectedSize === selectedSize &&
+        item.selectedColor === selectedColor
+    );
+
+    return existingItem ? existingItem.quantity : 0;
+  };
+
+  const alreadyInCart = getItemInCartCount();
+
   const handleQuantityChange = (type) => {
     if (type === "increase") {
       setQuantity((prev) => prev + 1);
@@ -73,17 +91,56 @@ const ProductDetails = () => {
   const handleAddToCart = () => {
     if (!product) return;
 
-    addToCart(product, quantity, selectedSize, selectedColor);
+    // Use the addToCart function from your CartContext
+    addToCart(product, selectedSize, selectedColor, quantity);
 
-    showNotification(
-      `${quantity} × ${product.name} added to cart`,
-      "success"
-    );
+    showNotification(`${quantity} × ${product.name} added to cart`, "success");
   };
 
   const handleBuyNow = () => {
     handleAddToCart();
-    navigate("/checkout");
+    navigate("/cart"); // Navigate to cart first, then user can proceed to checkout
+  };
+
+  const handleIncreaseQuantity = () => {
+    if (!product) return;
+
+    const existingItem = cartItems.find(
+      (item) =>
+        item.id === product.id &&
+        item.selectedSize === selectedSize &&
+        item.selectedColor === selectedColor
+    );
+
+    if (existingItem) {
+      updateQuantity(
+        product.id,
+        selectedSize,
+        selectedColor,
+        existingItem.quantity + 1
+      );
+      showNotification(`Increased quantity of ${product.name}`, "success");
+    } else {
+      addToCart(product, selectedSize, selectedColor, 1);
+      showNotification(`${product.name} added to cart`, "success");
+    }
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (!product || alreadyInCart <= 0) return;
+
+    if (alreadyInCart === 1) {
+      removeFromCart(product.id, selectedSize, selectedColor);
+      showNotification(`${product.name} removed from cart`, "info");
+    } else {
+      updateQuantity(
+        product.id,
+        selectedSize,
+        selectedColor,
+        alreadyInCart - 1
+      );
+      showNotification(`Decreased quantity of ${product.name}`, "success");
+    }
   };
 
   const formatCurrency = (amount) => {
@@ -109,12 +166,6 @@ const ProductDetails = () => {
     );
   }
 
-  const alreadyInCart = getCartItemCount(
-    product.id,
-    selectedSize,
-    selectedColor
-  );
-
   const sizes = ["Standard", "Small", "Medium", "Large"];
   const colors = [
     { name: "Red", hex: "#ff0000" },
@@ -133,7 +184,7 @@ const ProductDetails = () => {
       <Container maxWidth="lg">
         <Grid container spacing={6}>
           {/* Left Column - Product Images */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{xs:12, md:6}}>
             <Card
               sx={{
                 borderRadius: 3,
@@ -235,7 +286,7 @@ const ProductDetails = () => {
           </Grid>
 
           {/* Right Column - Product Details */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{xs:12, md:6}}>
             <Stack spacing={3}>
               {/* Product Title & Rating */}
               <Box>
@@ -280,27 +331,32 @@ const ProductDetails = () => {
                 >
                   {formatCurrency(product.price)}
                 </Typography>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    color: "text.disabled",
-                    textDecoration: "line-through",
-                  }}
-                >
-                  {formatCurrency(product.originalPrice)}
-                </Typography>
-                <Chip
-                  label={`Save ${formatCurrency(
-                    product.originalPrice - product.price
-                  )}`}
-                  size="small"
-                  sx={{
-                    backgroundColor: theme.palette.success.light,
-                    color: theme.palette.success.dark,
-                    fontWeight: 600,
-                    mt: 1,
-                  }}
-                />
+                {product.originalPrice &&
+                  product.originalPrice > product.price && (
+                    <>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color: "text.disabled",
+                          textDecoration: "line-through",
+                        }}
+                      >
+                        {formatCurrency(product.originalPrice)}
+                      </Typography>
+                      <Chip
+                        label={`Save ${formatCurrency(
+                          product.originalPrice - product.price
+                        )}`}
+                        size="small"
+                        sx={{
+                          backgroundColor: theme.palette.success.light,
+                          color: theme.palette.success.dark,
+                          fontWeight: 600,
+                          mt: 1,
+                        }}
+                      />
+                    </>
+                  )}
               </Box>
 
               <Divider />
@@ -310,25 +366,27 @@ const ProductDetails = () => {
                 <Typography variant="h6" sx={{ mb: 2 }}>
                   Select Size
                 </Typography>
-                <Grid size={{xs:6, md:4}}>
-                <Stack direction="row" spacing={2}>
-                  {sizes.map((size) => (
-                    <Button
-                      key={size}
-                      variant={selectedSize === size ? "contained" : "outlined"}
-                      onClick={() => setSelectedSize(size)}
-                      sx={{
-                        minWidth: 100,
-                        borderColor:
-                          selectedSize === size
-                            ? "transparent"
-                            : theme.palette.grey[400],
-                      }}
-                    >
-                      {size}
-                    </Button>
-                  ))}
-                </Stack>
+                <Grid size={{xs:12, md:4}}>
+                  <Stack direction="row" spacing={2}>
+                    {sizes.map((size) => (
+                      <Button
+                        key={size}
+                        variant={
+                          selectedSize === size ? "contained" : "outlined"
+                        }
+                        onClick={() => setSelectedSize(size)}
+                        sx={{
+                          minWidth: 100,
+                          borderColor:
+                            selectedSize === size
+                              ? "transparent"
+                              : theme.palette.grey[400],
+                        }}
+                      >
+                        {size}
+                      </Button>
+                    ))}
+                  </Stack>
                 </Grid>
               </Box>
 
@@ -411,15 +469,37 @@ const ProductDetails = () => {
                   </IconButton>
                 </Stack>
 
-                {/* Show how many are already in cart */}
+                {/* Show how many are already in cart with controls */}
                 {alreadyInCart > 0 && (
-                  <Typography
-                    variant="body2"
-                    color="primary"
-                    sx={{ mt: 1, fontStyle: "italic" }}
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={2}
+                    sx={{ mt: 2 }}
                   >
-                    {alreadyInCart} already in cart
-                  </Typography>
+                    <Typography
+                      variant="body2"
+                      color="primary"
+                      sx={{ fontStyle: "italic" }}
+                    >
+                      {alreadyInCart} already in cart
+                    </Typography>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={handleIncreaseQuantity}
+                    >
+                      Add One More
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="error"
+                      onClick={handleDecreaseQuantity}
+                    >
+                      Remove One
+                    </Button>
+                  </Stack>
                 )}
               </Box>
 
@@ -439,7 +519,7 @@ const ProductDetails = () => {
                     },
                   }}
                 >
-                  {alreadyInCart > 0 ? "Add More" : "Add to Cart"}
+                  {alreadyInCart > 0 ? "Add More to Cart" : "Add to Cart"}
                 </Button>
                 <Button
                   variant="outlined"
@@ -459,6 +539,33 @@ const ProductDetails = () => {
                   Buy Now
                 </Button>
               </Stack>
+
+              {/* Cart Summary */}
+              <Box sx={{ p: 2, bgcolor: "grey.50", borderRadius: 2 }}>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  Cart Summary
+                </Typography>
+                <Stack direction="row" justifyContent="space-between">
+                  <Typography variant="body2">Items in Cart:</Typography>
+                  <Typography variant="body2" fontWeight={600}>
+                    {getCartCount()}
+                  </Typography>
+                </Stack>
+                <Stack direction="row" justifyContent="space-between">
+                  <Typography variant="body2">Cart Total:</Typography>
+                  <Typography variant="body2" fontWeight={600}>
+                    {formatCurrency(getCartTotal())}
+                  </Typography>
+                </Stack>
+                <Button
+                  size="small"
+                  variant="text"
+                  onClick={() => navigate("/cart")}
+                  sx={{ mt: 1 }}
+                >
+                  View Cart
+                </Button>
+              </Box>
 
               {/* Additional Information */}
               <Box>
@@ -500,7 +607,7 @@ const ProductDetails = () => {
             </Typography>
             <Grid container spacing={3}>
               {relatedProducts.map((relatedProduct) => (
-                <Grid key={relatedProduct.id} size={{ xs: 6, md: 3 }}>
+                <Grid key={relatedProduct.id} item xs={6} md={3}>
                   <Card
                     onClick={() => navigate(`/product/${relatedProduct.id}`)}
                     sx={{

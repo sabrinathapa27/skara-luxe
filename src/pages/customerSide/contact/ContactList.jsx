@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Grid,
@@ -31,6 +31,9 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 const ContactList = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const contactInfo = {
     phone: [
@@ -73,7 +76,7 @@ const ContactList = () => {
             mb: 2,
           }}
         >
-         Get in Touch
+          Get in Touch
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
           Want to get in touch? Here's how you can reach us.

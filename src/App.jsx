@@ -9,10 +9,11 @@ import Collections from "./pages/customerSide/products/Collections";
 import ProductDetails from "./pages/customerSide/products/ProductDetails";
 import { CartProvider } from "./context/CartContext";
 import Cart from "./pages/customerSide/products/Cart";
-import ReturnPolicy from "./components/footer/ReturnPolicy";
-import ShippingInfo from "./components/footer/ShippingInfo";
-import FAQs from "./components/footer/FAQs";
 import { NotificationProvider } from "./context/NotificationContext";
+import FAQs from "./pages/customerSide/footer/FAQs";
+import ReturnPolicy from "./pages/customerSide/footer/ReturnPolicy";
+import ShippingInfo from "./pages/customerSide/footer/ShippingInfo";
+import ContactList from "./pages/customerSide/contact/ContactList";
 
 const App = () => {
   return (
@@ -28,12 +29,18 @@ const App = () => {
               {/* Routes with CustomerLayout */}
               <Route path="/" element={<CustomerLayout />}>
                 <Route index element={<Home />} />
-                <Route path="collections" element={<Collections />} />
+                <Route path="/contact" element={<ContactList />} />
+
+                {/* Product Routes */}
+                <Route path="/collections" element={<Collections />} />
                 <Route path="/product/:id" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart />} />
+
+                {/* Footer Related Routes */}
                 <Route path="/return-policy" element={<ReturnPolicy />} />
                 <Route path="/shipping-info" element={<ShippingInfo />} />
                 <Route path="/faqs" element={<FAQs />} />
+
                 {/* Add more routes here */}
                 {/* <Route path="products" element={<Products />} /> */}
                 {/* <Route path="cart" element={<Cart />} /> */}

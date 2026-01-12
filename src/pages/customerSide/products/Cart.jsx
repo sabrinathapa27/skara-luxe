@@ -438,6 +438,15 @@ const Cart = () => {
                 }}
               >
                 <Typography
+                  variant="body2"
+                  sx={{
+                    mb: 3,
+                    color: theme.palette.primary.dark,
+                  }}
+                >
+                 (Note: Delivery is free for orders above NPR 15,000)
+                </Typography>
+                <Typography
                   variant="h6"
                   sx={{
                     mb: 3,

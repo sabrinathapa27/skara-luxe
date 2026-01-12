@@ -20,17 +20,11 @@ const Footer = () => {
   const [email, setEmail] = useState("");
 
   const footerLinks = [
-    { label: "Contact Us", path: "/" },
+    { label: "Contact Us", path: "/contact" },
     { label: "Shipping Info", path: "/shipping-info" },
     { label: "Returns", path: "/return-policy " },
     { label: "FAQ", path: "/faqs" },
   ];
-
-  const handleNewsletterSubmit = (e) => {
-    e.preventDefault();
-    console.log("Newsletter signup:", email);
-    setEmail("");
-  };
 
   return (
     <Box

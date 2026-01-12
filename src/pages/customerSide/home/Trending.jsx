@@ -117,7 +117,7 @@ const Trending = () => {
               fontSize: { xs: "1.75rem", md: "2.25rem" },
             }}
           >
-            Trending Products
+           New Arrivals
           </Typography>
 
           <Stack direction="row" spacing={1}>

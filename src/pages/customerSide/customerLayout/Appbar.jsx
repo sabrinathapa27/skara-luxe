@@ -32,7 +32,7 @@ import { useCart } from "../../../context/CartContext";
 const NAV_LINKS = [
   { text: "Home", icon: <Home />, path: "/" },
   { text: "Collections", icon: <Store />, path: "/collections" },
-  { text: "Contact", icon: <ContactMail />, path: "/" },
+  { text: "Contact", icon: <ContactMail />, path: "/contact" },
 ];
 
 const ACTIONS = [
@@ -61,7 +61,7 @@ const Appbar = () => {
           navigate("/collections");
           break;
         case "contact":
-          navigate("/");
+          navigate("/contact");
           break;
         default:
           navigate("/");

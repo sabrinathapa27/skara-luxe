@@ -8,12 +8,13 @@ import CustomerRegister from "./pages/customerSide/customerAuth/CustomerRegister
 import Collections from "./pages/customerSide/products/Collections";
 import ProductDetails from "./pages/customerSide/products/ProductDetails";
 import { CartProvider } from "./context/CartContext";
-import Cart from "./pages/customerSide/products/Cart";
 import { NotificationProvider } from "./context/NotificationContext";
 import FAQs from "./pages/customerSide/footer/FAQs";
 import ReturnPolicy from "./pages/customerSide/footer/ReturnPolicy";
 import ShippingInfo from "./pages/customerSide/footer/ShippingInfo";
 import ContactList from "./pages/customerSide/contact/ContactList";
+import Cart from "./pages/customerSide/cart/Cart";
+import Checkout from "./pages/customerSide/checkout/Checkout";
 
 const App = () => {
   return (
@@ -34,7 +35,10 @@ const App = () => {
                 {/* Product Routes */}
                 <Route path="/collections" element={<Collections />} />
                 <Route path="/product/:id" element={<ProductDetails />} />
+
                 <Route path="/cart" element={<Cart />} />
+
+                <Route path="/checkout" element={<Checkout />} />
 
                 {/* Footer Related Routes */}
                 <Route path="/return-policy" element={<ReturnPolicy />} />

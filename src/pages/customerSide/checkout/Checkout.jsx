@@ -93,9 +93,11 @@ const Checkout = () => {
     if (activeStep === 1) {
       if (
         !shippingInfo.firstName ||
+        !shippingInfo.lastName ||
         !shippingInfo.email ||
         !shippingInfo.phone ||
-        !shippingInfo.address
+        !shippingInfo.address ||
+        !shippingInfo.addressType
       ) {
         alert("Please fill in all required shipping details");
         return;
@@ -165,7 +167,7 @@ const Checkout = () => {
         return (
           <ShippingDetails
             shippingInfo={shippingInfo}
-            handleShippingChange={handleShippingChange}
+            setShippingInfo={setShippingInfo}
           />
         );
       case 2:
@@ -223,7 +225,7 @@ const Checkout = () => {
           mx: "auto",
         }}
       >
-        <Grid size={{ xs: 12, md: 8 }}>
+        <Grid size={{ xs: 12, md: cartItems.length === 0 || (orderPlaced && activeStep === 3) ? 12 : 8 }}>
           <Paper
             sx={{
               p: { xs: 2, sm: 3, md: 4 },
@@ -235,20 +237,22 @@ const Checkout = () => {
           </Paper>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Box sx={{ position: "sticky", top: 20 }}>
-            <OrderSummary
-              orderSummary={orderSummary}
-              cartItems={cartItems}
-              activeStep={activeStep}
-              steps={steps}
-              loading={loading}
-              handleNext={handleNext}
-              handleBack={handleBack}
-              handlePlaceOrder={handlePlaceOrder}
-            />
-          </Box>
-        </Grid>
+        {cartItems.length > 0 && !(orderPlaced && activeStep === 3) && (
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Box sx={{ position: "sticky", top: 20 }}>
+              <OrderSummary
+                orderSummary={orderSummary}
+                cartItems={cartItems}
+                activeStep={activeStep}
+                steps={steps}
+                loading={loading}
+                handleNext={handleNext}
+                handleBack={handleBack}
+                handlePlaceOrder={handlePlaceOrder}
+              />
+            </Box>
+          </Grid>
+        )}
       </Grid>
     </Box>
   );

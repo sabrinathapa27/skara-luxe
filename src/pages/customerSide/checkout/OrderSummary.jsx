@@ -23,9 +23,6 @@ const OrderSummary = ({
   handleBack,
   handlePlaceOrder,
 }) => {
-  console.log("OrderSummary - cartItems:", cartItems); // Debug log
-  console.log("OrderSummary - orderSummary:", orderSummary); // Debug log
-
   return (
     <Paper sx={{ p: 3, position: "sticky", top: 20 }}>
       <Typography
@@ -71,7 +68,7 @@ const OrderSummary = ({
         </ListItem>
       </List>
 
-      {cartItems.length > 0 && activeStep < 3 && (
+      {cartItems.length > 0 && activeStep < 2 && (
         <Button
           fullWidth
           variant="contained"

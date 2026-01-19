@@ -25,7 +25,6 @@ const CartReview = () => {
     removeFromCart(item.id, item.selectedSize, item.selectedColor);
   };
 
-
   const handleQuantityChange = (item, newQuantity) => {
     if (newQuantity < 1) {
       handleRemoveItem(item);
@@ -46,9 +45,18 @@ const CartReview = () => {
       </Typography>
 
       {cartItems.length === 0 ? (
-        <Alert severity="info">
-          Your cart is empty. Please add items to proceed with checkout.
-        </Alert>
+        <>
+          <Alert severity="info">
+            Your cart is empty. Please add items to proceed with checkout.
+          </Alert>
+          <Button
+            variant="contained"
+            onClick={() => (window.location.href = "/")}
+            sx={{ mt: 2 }}
+          >
+            Continue Shopping
+          </Button>
+        </>
       ) : (
         <TableContainer component={Paper} sx={{ mb: 4 }}>
           <Table>

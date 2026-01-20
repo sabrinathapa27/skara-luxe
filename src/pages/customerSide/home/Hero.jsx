@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useRef } from "react";
 import {
   Box,
   Container,
@@ -15,57 +15,107 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import { useNavigate } from "react-router-dom";
 
+// GSAP Imports
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
 const Hero = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+  const containerRef = useRef();
 
   const features = [
     {
-      icon: (
-        <PaletteIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />
-      ),
+      icon: <PaletteIcon />,
       title: "Authentic Designs",
       description: "Where Integrity Meets Innovation",
     },
     {
-      icon: (
-        <EmojiEventsIcon
-          sx={{ fontSize: 40, color: theme.palette.primary.main }}
-        />
-      ),
+      icon: <EmojiEventsIcon />,
       title: "Premium Quality",
       description: "Only the finest fabrics and craftsmanship",
     },
     {
-      icon: (
-        <LocalShippingIcon
-          sx={{ fontSize: 40, color: theme.palette.primary.main }}
-        />
-      ),
+      icon: <LocalShippingIcon />,
       title: "Fast Delivery",
       description: "Quick and secure shipping nationwide",
     },
     {
-      icon: (
-        <SupportAgentIcon
-          sx={{ fontSize: 40, color: theme.palette.primary.main }}
-        />
-      ),
+      icon: <SupportAgentIcon />,
       title: "Customer Service",
       description: "Dedicated support for your needs",
     },
   ];
 
-  const handleShopNow = () => {
-    navigate("/collections");
-  };
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({
+        defaults: { ease: "power4.out", duration: 1.2 },
+      });
+
+      // 1. Initial Load Animation (Hero Text & Button)
+      tl.from(".gsap-hero-title", {
+        y: 60,
+        opacity: 0,
+        delay: 0.2,
+      })
+        .from(
+          ".gsap-hero-sub",
+          {
+            y: 40,
+            opacity: 0,
+          },
+          "-=0.8",
+        )
+        .from(
+          ".gsap-hero-desc",
+          {
+            y: 30,
+            opacity: 0,
+          },
+          "-=0.8",
+        )
+        .from(
+          ".gsap-hero-btn",
+          {
+            scale: 0.9,
+            opacity: 0,
+          },
+          "-=1",
+        );
+
+      // 2. Hero Image Parallax (Entrance + Subtle Scale)
+      gsap.from(".gsap-hero-img", {
+        x: 100,
+        opacity: 0,
+        duration: 1.5,
+        ease: "power2.out",
+      });
+
+      // 3. ScrollTrigger for Features Section
+      gsap.from(".gsap-feature-card", {
+        scrollTrigger: {
+          trigger: ".gsap-features-container",
+          start: "top 80%", // Starts when the top of the container hits 80% of the viewport
+        },
+        y: 50,
+        opacity: 0,
+        stagger: 0.2,
+        duration: 1,
+        ease: "back.out(1.7)",
+      });
+    },
+    { scope: containerRef },
+  );
+
+  const handleShopNow = () => navigate("/collections");
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box ref={containerRef} sx={{ width: "100%", overflow: "hidden" }}>
       {/* Hero Section */}
       <Box
         sx={{
@@ -73,107 +123,88 @@ const Hero = () => {
             "linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(44, 27, 71, 0.05) 100%)",
           py: 8,
           px: 2,
-          minHeight: "80vh",
+          minHeight: "85vh",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
         <Container maxWidth={false} sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
           <Grid container spacing={6} alignItems="center">
             {/* Text Content */}
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{xs:12, md:6}}>
               <Typography
+                className="gsap-hero-title"
                 variant="h1"
                 sx={{
-                  fontSize: { xs: "2rem", md: "3.5rem" },
+                  fontSize: { xs: "2.5rem", md: "4rem" },
                   fontFamily: "'Playfair Display', serif",
                   color: "#2C1B47",
-                  marginBottom: 2,
+                  mb: 2,
+                  fontWeight: 700,
                 }}
               >
                 Timeless Elegance
               </Typography>
               <Typography
+                className="gsap-hero-sub"
                 variant="h5"
                 sx={{
-                  color: theme.palette.text.primary,
-                  marginBottom: 2,
+                  mb: 2,
                   fontWeight: 600,
+                  color: theme.palette.text.primary,
                 }}
               >
                 Discover our exquisite collection of handcrafted sarees
               </Typography>
               <Typography
+                className="gsap-hero-desc"
                 variant="body1"
                 sx={{
                   color: theme.palette.text.secondary,
-                  marginBottom: 3,
+                  mb: 4,
                   lineHeight: 1.8,
-                  fontSize: "1.125rem",
+                  fontSize: "1.1rem",
                 }}
               >
                 Each saree tells a story of tradition, craftsmanship, and
                 luxury. Embrace the beauty of heritage with a modern touch.
               </Typography>
-              <Stack
-                direction={{ xs: "column", sm: "row" }}
-                spacing={2}
-                sx={{ marginTop: 3 }}
-              >
+              <Stack direction="row" className="gsap-hero-btn">
                 <Button
                   variant="contained"
-                  sx={{
-                    backgroundColor: theme.palette.primary.main,
-                    color: "#FFFFFF",
-                    padding: "0.75rem 2rem",
-                    fontSize: "1rem",
-                    fontWeight: 600,
-                    "&:hover": {
-                      backgroundColor: theme.palette.primary.dark,
-                      transform: "translateY(-2px)",
-                      boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-                    },
-                  }}
+                  size="large"
                   onClick={handleShopNow}
+                  sx={{
+                    px: 5,
+                    py: 1.5,
+                    borderRadius: "50px",
+                    fontWeight: 700,
+                    textTransform: "none",
+                    boxShadow: "0 10px 20px rgba(44, 27, 71, 0.2)",
+                  }}
                 >
                   Shop Now
                 </Button>
-                {/* <Button
-                  variant="outlined"
-                  sx={{
-                    borderColor: theme.palette.primary.main,
-                    color: theme.palette.primary.main,
-                    padding: "0.75rem 2rem",
-                    fontSize: "1rem",
-                    fontWeight: 600,
-                    "&:hover": {
-                      backgroundColor: theme.palette.primary.light,
-                      color: "#2C1B47",
-                      transform: "translateY(-2px)",
-                    },
-                  }}
-                  onClick ={handleViewCollections}
-                >
-                  View Collections
-                </Button> */}
               </Stack>
             </Grid>
 
             {/* Image Placeholder */}
             <Grid
-              size={{ xs: 12, md: 6 }}
+              item
+              xs={12}
+              md={6}
               sx={{ display: "flex", justifyContent: "center" }}
             >
               <Box
+                className="gsap-hero-img"
                 component="img"
                 src="/heroSaree.png"
                 sx={{
                   width: "100%",
-                  maxWidth: 500,
+                  maxWidth: 550,
                   aspectRatio: "4/5",
-                  borderRadius: 3,
-                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+                  borderRadius: "20px",
+                  boxShadow: "30px 30px 60px rgba(0,0,0,0.12)",
                   objectFit: "cover",
                 }}
               />
@@ -183,127 +214,63 @@ const Hero = () => {
       </Box>
 
       {/* Features Section */}
-      <Container
-        maxWidth={false}
-        sx={{
-          px: {
-            xs: 2,
-            sm: 3,
-            md: 6,
-            lg: 12,
-          },
-          py: { xs: 4, md: 6 },
-        }}
+      <Box
+        className="gsap-features-container"
+        sx={{ py: 10, bgcolor: "white" }}
       >
-        <Grid container spacing={{ xs: 2, md: 3 }}>
+        <Container maxWidth="lg">
           <Typography
-            variant="h4"
+            variant="h3"
             sx={{
-              color: theme.palette.primary.main,
               textAlign: "center",
-              width: "100%",
-              marginBottom: { xs: 3, md: 4 },
-              fontSize: {
-                xs: "1.5rem",
-                sm: "1.75rem",
-                md: "2rem",
-              },
-              px: { xs: 1, sm: 0 },
+              mb: 8,
+              fontFamily: "'Playfair Display', serif",
+              color: "#2C1B47",
             }}
           >
             Why Choose SkaraLuxe?
           </Typography>
 
-          {features.map((feature, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
-              <Paper
-                sx={{
-                  padding: {
-                    xs: 2,
-                    sm: 2.5,
-                    md: 3,
-                  },
-                  height: "100%",
-                  textAlign: "center",
-                  transition: "all 250ms ease-in-out",
-                  backgroundColor: "background.paper",
-                  cursor: "pointer",
-                  "&:hover": {
-                    transform: { xs: "none", sm: "translateY(-4px)" },
-                    boxShadow: {
-                      xs: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                      sm: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                    },
-                    backgroundColor: theme.palette.primary.light,
-                    "& .feature-icon": {
-                      color: theme.palette.primary.dark,
-                    },
-                    "& .feature-title": {
-                      color: theme.palette.primary.dark,
-                    },
-                    "& .feature-description": {
-                      color: theme.palette.primary.dark,
-                    },
-                  },
-                }}
-                elevation={0}
+          <Grid container spacing={4}>
+            {features.map((feature, index) => (
+              <Grid size={{xs:12, md:3}}
+                key={index}
+                className="gsap-feature-card"
               >
-                <Box
+                <Paper
+                  elevation={0}
                   sx={{
-                    marginBottom: { xs: 1.5, md: 2 },
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                  className="feature-icon"
-                >
-                  {React.cloneElement(feature.icon, {
-                    sx: {
-                      fontSize: {
-                        xs: 32,
-                        sm: 36,
-                        md: 40,
-                      },
-                    },
-                  })}
-                </Box>
-                <Typography
-                  variant="h6"
-                  className="feature-title"
-                  sx={{
-                    color: "#2C1B47",
-                    marginBottom: { xs: 0.5, md: 1 },
-                    fontFamily: "'Playfair Display', serif",
-                    transition: "color 250ms ease-in-out",
-                    fontSize: {
-                      xs: "1rem",
-                      sm: "1.125rem",
-                      md: "1.25rem",
+                    p: 4,
+                    height: "100%",
+                    textAlign: "center",
+                    borderRadius: "15px",
+                    border: "1px solid rgba(0,0,0,0.05)",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "translateY(-10px)",
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.05)",
+                      borderColor: theme.palette.primary.main,
                     },
                   }}
                 >
-                  {feature.title}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  className="feature-description"
-                  sx={{
-                    color: "#6B7280",
-                    transition: "color 250ms ease-in-out",
-                    fontSize: {
-                      xs: "0.8125rem",
-                      sm: "0.875rem",
-                      md: "0.9375rem",
-                    },
-                    lineHeight: 1.6,
-                  }}
-                >
-                  {feature.description}
-                </Typography>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
+                  <Box sx={{ mb: 2, color: theme.palette.primary.main }}>
+                    {React.cloneElement(feature.icon, { sx: { fontSize: 45 } })}
+                  </Box>
+                  <Typography
+                    variant="h6"
+                    sx={{ mb: 1, fontFamily: "'Playfair Display', serif" }}
+                  >
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {feature.description}
+                  </Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
     </Box>
   );
 };
